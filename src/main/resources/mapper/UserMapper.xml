@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.learn.learnsatoken.mvc.mapper.UserMapper">
+
+    <resultMap type="com.learn.learnsatoken.mvc.domain.User" id="UserMap">
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select username,
+               password,
+               salt,
+               create_time,
+               update_time,
+               deleted
+        from user
+        where username = #{username}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+        username, password, salt, create_time, update_time, deleted from user
+        <where>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="salt != null and salt != ''">
+                and salt = #{salt}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="deleted != null">
+                and deleted = #{deleted}
+            </if>
+        </where>
+        <if test="orderByMe != null and orderByMe != '' and orderByMeSort != null and orderByMeSort != ''">
+            order by
+            <choose>
+                <when test="orderByMe == 'username' and orderByMeSort == 'ASC'">
+                    username
+                </when>
+                <when test="orderByMe == 'password' and orderByMeSort == 'ASC'">
+                    password
+                </when>
+                <when test="orderByMe == 'salt' and orderByMeSort == 'ASC'">
+                    salt
+                </when>
+                <when test="orderByMe == 'createTime' and orderByMeSort == 'ASC'">
+                    create_time
+                </when>
+                <when test="orderByMe == 'updateTime' and orderByMeSort == 'ASC'">
+                    update_time
+                </when>
+                <when test="orderByMe == 'deleted' and orderByMeSort == 'ASC'">
+                    deleted
+                </when>
+                <when test="orderByMe == 'username' and orderByMeSort == 'DESC'">
+                    username desc
+                </when>
+                <when test="orderByMe == 'password' and orderByMeSort == 'DESC'">
+                    password desc
+                </when>
+                <when test="orderByMe == 'salt' and orderByMeSort == 'DESC'">
+                    salt desc
+                </when>
+                <when test="orderByMe == 'createTime' and orderByMeSort == 'DESC'">
+                    create_time desc
+                </when>
+                <when test="orderByMe == 'updateTime' and orderByMeSort == 'DESC'">
+                    update_time desc
+                </when>
+                <when test="orderByMe == 'deleted' and orderByMeSort == 'DESC'">
+                    deleted desc
+                </when>
+                <otherwise>
+                    1
+                </otherwise>
+            </choose>
+        </if>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="username">
+        insert into user(username, password, salt)
+        values (#{username}, #{password}, #{salt})
+    </insert>
+</mapper>
+

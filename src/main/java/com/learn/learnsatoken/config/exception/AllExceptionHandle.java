@@ -1,5 +1,7 @@
 package com.learn.learnsatoken.config.exception;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotRoleException;
 import com.learn.learnsatoken.util.R;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +26,14 @@ import static com.learn.learnsatoken.config.constant.Constant.PACKAGE_NAME;
 @ControllerAdvice
 @ResponseBody
 public class AllExceptionHandle {
+    /**
+     * 登录权限校验
+     */
+    @ExceptionHandler({NotLoginException.class, NotRoleException.class})
+    public ResponseEntity<R> unauthorized(Exception e) {
+        return R.deal(R.unauthorized().data(e(e)));
+    }
+
     /**
      * 校验传参
      */

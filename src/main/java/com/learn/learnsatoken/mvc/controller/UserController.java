@@ -63,8 +63,7 @@ public class UserController {
         }
         if (data.getPassword().equals(MD5Util.toMD5(user.getPassword(), data.getSalt()))) {
             StpUtil.login(username);
-            String token = StpUtil.getTokenValueByLoginId(username);
-            return R.deal(R.ok().data(token));
+            return R.deal(R.ok().data(StpUtil.getTokenInfo().getTokenValue()));
         }
         return R.deal(R.unauthorized().data("wrong password"));
     }
